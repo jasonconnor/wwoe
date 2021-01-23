@@ -4,9 +4,13 @@ import dotenv from 'dotenv'
 import express from 'express'
 
 import connect from './conf/db.js'
+import AuthRouter from './src/routes/AuthRouter.js'
 
 const app = express()
 dotenv.config()
+
+// routes
+app.use('/', AuthRouter)
 
 const httpsOptions = {
   key: fs.readFileSync('../bin/key.pem'),
