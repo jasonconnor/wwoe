@@ -3,7 +3,42 @@ import bcrypt from 'bcryptjs'
 import User from '../models/UserModel.js'
 
 export default class UserController {
-  static login = (request, response) => {
+  static login = async (request, response) => {
+    let userExists = null
+
+    try {
+      userExists = await User.findOne({username: request.body.username})
+    } catch(error) {
+      return response.status(500).json({
+        message: 'Failed to check for existing user.',
+        error: error.message
+      })
+    }
+
+    if (!userExists) {
+      return response.status(400).json({
+        message: 'Invalid username.'
+      })
+    }
+
+    let validPassword = null 
+
+    try {
+      validPassword = await bcrypt.compare(request.body.password, userExists.password)
+    } catch(error) {
+      return response.status(500).json({
+        message: 'Failed to compare passwords.',
+        error: error.message
+      })
+    }
+    console.log(validPassword)
+
+    if (!validPassword) {
+       return response.status(400).json({
+          message: 'Invalid password.'
+       })
+    }
+
     response.status(200).json({
       message: 'logged in!'
     })
