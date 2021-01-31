@@ -25,7 +25,7 @@ export default class UserController {
     let validPassword = null 
 
     try {
-      validPassword = await bcrypt.compare(request.body.password, userExists.password)
+      validPassword = await bcrypt.compare(request.body.password, user.password)
     } catch(error) {
       return response.status(500).json({
         message: 'Failed to compare passwords.',

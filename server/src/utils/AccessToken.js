@@ -20,6 +20,12 @@ export default class AccessToken {
   }
 
   static verify = (token) => {
+    return new Promise((resolve, reject) => {
+      jwt.verify(token, node.env.ACCESS_SECRET, () => {
+        if (error) reject(error)
 
+        resolve(decoded)
+      })
+    })
   }
 }
