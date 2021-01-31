@@ -1,13 +1,14 @@
 import bcrypt from 'bcryptjs'
 
 import User from '../models/UserModel.js'
+import AccessToken from '../utils/AccessToken.js'
 
 export default class UserController {
   static login = async (request, response) => {
-    let userExists = null
+    let user = null
 
     try {
-      userExists = await User.findOne({username: request.body.username})
+      user = await User.findOne({username: request.body.username})
     } catch(error) {
       return response.status(500).json({
         message: 'Failed to check for existing user.',
@@ -15,7 +16,7 @@ export default class UserController {
       })
     }
 
-    if (!userExists) {
+    if (!user) {
       return response.status(400).json({
         message: 'Invalid username.'
       })
@@ -31,7 +32,6 @@ export default class UserController {
         error: error.message
       })
     }
-    console.log(validPassword)
 
     if (!validPassword) {
        return response.status(400).json({
@@ -39,9 +39,20 @@ export default class UserController {
        })
     }
 
-    response.status(200).json({
-      message: 'logged in!'
-    })
+    let accessToken = null
+
+    try {
+      accessToken = await AccessToken.create(user)
+    } catch(error) {
+      return response.status(500).json({
+        message: 'Failed to create access token.',
+        error: error.message
+      })
+    }
+
+    return response.status(200)
+      .header('Authentication', accessToken)
+      .json({message: 'logged in!'})
   }
 
   static register = async (request, response) => {
@@ -78,10 +89,10 @@ export default class UserController {
       password: hashedPassword
     })
 
-    let savedUser = null
+    let result = null
 
     try {
-      savedUser = await newUser.save()
+      result = await newUser.save()
     } catch(error) {
       return response.status(500).json({
         message: 'Failed to save new user.',
@@ -90,7 +101,7 @@ export default class UserController {
     }
 
     return response.status(200).json({
-      message: `Successfully added new user: ${savedUser.username}.`
+      message: `Successfully added new user: ${result.username}.`
     })
   }
 }
