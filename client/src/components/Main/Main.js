@@ -1,10 +1,12 @@
+import * as S from './style'
+
 const Main = () => {
   return (
-    <main>
-      <div className='wrapper'>
+    <S.Main>
+      <S.Wrapper>
         main
-      </div>
-    </main>
+      </S.Wrapper>
+    </S.Main>
   )
 }
 

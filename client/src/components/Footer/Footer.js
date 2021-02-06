@@ -1,10 +1,13 @@
+
+import * as S from './style'
+
 const Footer = () => {
   return (
-    <footer>
-      <div className='wrapper'>
+    <S.Footer>
+      <S.Wrapper>
         footer
-      </div>
-    </footer>
+      </S.Wrapper>
+    </S.Footer>
   )
 }
 

@@ -1,10 +1,12 @@
+import * as S from './style'
+
 const Header = () => {
   return (
-    <header>
-      <div className='wrapper'>
+    <S.Header>
+      <S.Wrapper>
         header
-      </div>
-    </header>
+      </S.Wrapper>
+    </S.Header>
   )
 }
 
