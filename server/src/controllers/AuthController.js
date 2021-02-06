@@ -1,10 +1,20 @@
 import bcrypt from 'bcryptjs'
+import {validationResult} from 'express-validator'
 
 import User from '../models/UserModel.js'
 import AccessToken from '../utils/AccessToken.js'
 
 export default class UserController {
   static login = async (request, response) => {
+    const loginError = validationResult(request)
+
+    if (!loginError.isEmpty()) {
+      return response.status(422).json({
+        message: 'Unable to validate request.',
+        error: loginError.array()[0].msg
+      })
+    }
+
     let user = null
 
     try {
@@ -56,6 +66,14 @@ export default class UserController {
   }
 
   static register = async (request, response) => {
+    const registrationError = validationResult(request)
+
+    if (!registrationError.isEmpty()) {
+      return response.status(422).json({
+        message: 'Unable to validate request.',
+        error: registrationError.array()[0].msg
+      })
+    }
     let userExists = null
 
     try {

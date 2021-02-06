@@ -3,9 +3,15 @@ import mongoose from 'mongoose'
 const UserSchema = mongoose.Schema({
   username: {
     type: String,
+    required: true,
+    max: 20,
+    min: 4
   },
   password: {
-    type: String
+    type: String,
+    required: true,
+    max: 20,
+    min: 6
   },
   role: {
     type: String,
