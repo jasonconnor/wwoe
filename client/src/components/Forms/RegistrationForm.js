@@ -1,19 +1,23 @@
+import {useState} from 'react'
 import {useForm} from 'react-hook-form'
 
 import FormGroup from './FormGroup'
+import RegistrationService from '../../services/RegistrationService'
 
 import * as S from './style'
 
 const RegistrationForm = () => {
+  const [message, setMessage] = useState()
   const {errors, handleSubmit, register} = useForm({mode: 'onChange'})
 
   const onSubmit = async (data) => {
-    const formData = new FormData()
-
-    formData.append('username', data.username)
-    formData.append('password', data.password)
-
-    console.log(formData)
+    try {
+      const response = await RegistrationService(data)
+      setMessage(response.message)
+    } catch(error) {
+      console.error(error)
+      setMessage(error)
+    }
   }
 
   return (
@@ -21,6 +25,12 @@ const RegistrationForm = () => {
       encType='multipart/form-data'
       onSubmit={handleSubmit(onSubmit)}
     >
+
+      {message 
+        ? <div>{message}</div>
+        : null
+      }
+
       <FormGroup
         type='text'
         name='username'
