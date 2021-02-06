@@ -1,10 +1,14 @@
+import Nav from './Nav'
+
 import * as S from './style'
 
 const Header = () => {
   return (
     <S.Header>
       <S.Wrapper>
-        header
+        <h1>What Would Olivia Eat</h1>
+
+        <Nav />
       </S.Wrapper>
     </S.Header>
   )

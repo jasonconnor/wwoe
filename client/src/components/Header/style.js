@@ -1,3 +1,4 @@
+import {Link} from 'react-router-dom'
 import styled from 'styled-components'
 
 export const Header = styled.header`
@@ -7,6 +8,19 @@ export const Header = styled.header`
 `
 
 export const Wrapper = styled.div`
+  align-items: center;
   background: #eee;
+  display: flex;
+  justify-content: space-between;
   width: 980px;
+`
+
+export const Nav = styled.nav`
+  display: flex;
+`
+
+export const NavLink = styled(Link)`
+  color: pink;
+  padding: 5px 10px;
+  text-decoration: none;
 `
