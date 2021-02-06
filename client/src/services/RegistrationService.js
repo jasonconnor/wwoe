@@ -1,6 +1,5 @@
 const RegistrationService = (data) => {
   return new Promise(async (resolve, reject) => {
-    const url = '/register'
     const formData = new FormData()
 
     formData.append('username', data.username)
@@ -10,7 +9,7 @@ const RegistrationService = (data) => {
     let result = null
 
     try {
-      response = await fetch(url, {
+      response = await fetch('/register', {
         method: 'POST',
         body: formData
       })

@@ -26,6 +26,8 @@ const RegistrationForm = () => {
       onSubmit={handleSubmit(onSubmit)}
     >
 
+      <h2>Register</h2>
+
       {message 
         ? <div>{message}</div>
         : null
