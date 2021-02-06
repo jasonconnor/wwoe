@@ -6,6 +6,8 @@ export const Main = styled.main`
 `
 
 export const Wrapper = styled.div`
-  background: #ededed;  
+  background: #ededed;
+  display: flex;
+  justify-content: center;
   width: 900px;
 `
