@@ -14,12 +14,15 @@ export default class Authentication {
         message: 'Failed to validate token',
         error: error.message
       })
-    } 
+    }
 
     if (!token) {
       return response.status(500).json({
         message: 'Unable to verify access token.'
       })
     }
+
+    request.token = token
+    next()
   }
 }
