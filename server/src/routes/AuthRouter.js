@@ -7,7 +7,7 @@ import AuthController from '../controllers/AuthController.js'
 const AuthRouter = express.Router()
 
 // POST Routes
-AuthRouter.post('/login', Validator.login, AuthController.login)
+AuthRouter.post('/login', upload.none(), Validator.login, AuthController.login)
 AuthRouter.post('/register', upload.none(), Validator.register, AuthController.register)
 
 export default AuthRouter

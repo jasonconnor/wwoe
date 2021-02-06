@@ -2,6 +2,7 @@ import {useState} from 'react'
 import {useForm} from 'react-hook-form'
 
 import FormGroup from './FormGroup'
+import LoginService from '../../services/LoginService'
 
 import * as S from './style'
 
@@ -10,7 +11,13 @@ const LoginForm = () => {
   const {errors, handleSubmit, register} = useForm({mode: 'onChange'})
 
   const onSubmit = async (data) => {
-
+    try {
+      const response = await LoginService(data)
+      setMessage(response.message)
+    } catch(error) {
+      console.error(error)
+      setMessage(error)
+    }
   }
 
   return (
