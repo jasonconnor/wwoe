@@ -13,5 +13,6 @@ AuthRouter.get('/account', Authentication.checkToken, AuthController.getAccount)
 // POST Routes
 AuthRouter.post('/login', upload.none(), Validator.login, AuthController.login)
 AuthRouter.post('/register', upload.none(), Validator.register, AuthController.register)
+AuthRouter.post('/refresh_token', AuthController.refreshToken)
 
 export default AuthRouter

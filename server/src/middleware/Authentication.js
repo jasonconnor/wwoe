@@ -6,7 +6,7 @@ export default class Authentication {
 
     if (!authHeader) {
       return response.status(401).json({
-        message: 'No access token provided.'
+        message: 'No access token was provided.'
       })
     }
     const accessToken = authHeader.split(' ')[1]
@@ -17,14 +17,14 @@ export default class Authentication {
       token = await AccessToken.verify(accessToken)
     } catch(error) {
       return response.status(401).json({
-        message: 'Failed to validate token.',
-        error: error.message
+        error: 'Failed to validate token.',
+        cause: error.message
       })
     }
 
     if (!token) {
       return response.status(500).json({
-        message: 'Unable to verify access token.'
+        error: 'Unable to verify access token.'
       })
     }
 

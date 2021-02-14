@@ -3,6 +3,7 @@ import {validationResult} from 'express-validator'
 
 import User from '../models/UserModel.js'
 import AccessToken from '../utils/AccessToken.js'
+import RefreshToken from '../utils/RefreshToken.js'
 
 export default class UserController {
   static login = async (request, response) => {
@@ -49,15 +50,26 @@ export default class UserController {
     }
 
     let accessToken = null
+    let refreshToken = null
 
     try {
       accessToken = await AccessToken.create(user)
+      refreshToken = await RefreshToken.create(user)
     } catch(error) {
       return response.status(500).json({
-        error: 'Failed to create access token.',
+        error: 'Failed to create new tokens.',
         cause: error.message
       })
     }
+
+    // TODO: Abstract to its own cookie module in Utils
+    response.cookie('token', refreshToken, {
+      secure: true,
+      httpOnly: true,
+      sameSite: 'Strict',
+      maxAge: 86400000 * 7,
+      path: '/refresh_token'
+    })
 
     return response.status(200)
       .header('Authentication', accessToken)
@@ -120,6 +132,61 @@ export default class UserController {
     return response.status(200).json({
       message: `Successfully added new user: ${result.username}.`
     })
+  }
+
+  static refreshToken = async (request, response) => {
+    const token = request.cookies.token
+
+    if (!token) {
+      return response.status(500).json({
+        error: 'No token was provided.'
+      })
+    }
+
+    let validToken = null
+
+    try {
+      validToken = await RefreshToken.verify(token)
+    } catch(error) {
+      return response.status(500).json({
+        error: 'Invalid token.',
+        cause: error.message
+      })
+    }
+
+    if (!validToken) {
+      return response.status(500).json({
+        error: 'Failed to verify refresh token.'
+      })
+    }
+
+    let accessToken = null
+    let refreshToken = null
+
+    try {
+      accessToken = await AccessToken.create(validToken.sub)
+      refreshToken = await RefreshToken.create(validToken.sub)
+    } catch(error) {
+      return response.status(500).json({
+        error: 'Failed to create new tokens.',
+        cause: error.message
+      })
+    }
+
+    // TODO: Abstract to its own cookie module in Utils
+    response.cookie('token', refreshToken, {
+      secure: true,
+      httpOnly: true,
+      sameSite: 'Strict',
+      maxAge: 86400000 * 7,
+      path: '/refresh_token'
+    })
+
+    return response.status(200)
+      .header('Authentication', accessToken)  
+      .json({
+        message: 'New tokens assigned!'
+      })
   }
 
   // TODO: Place in UserController
