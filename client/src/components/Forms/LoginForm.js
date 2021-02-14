@@ -6,18 +6,19 @@ import LoginService from '../../services/LoginService'
 
 import * as S from './style'
 
-const LoginForm = () => {
-  const [message, setMessage] = useState()
+const LoginForm = ({history}) => {
+  const [formError, setFormError] = useState('')
   const {errors, handleSubmit, register} = useForm({mode: 'onChange'})
 
-  // TODO: Clear password on submit, only set error message, push to admin dashboard on sign in
-  const onSubmit = async (data) => {
+  const onSubmit = async (data, event) => {
     try {
-      const response = await LoginService(data)
-      setMessage(response.message)
+      await LoginService(data)
+      history.push('/profile')
     } catch(error) {
-      setMessage(error)
+      setFormError(error)
     }
+
+    event.target[1].value =''
   }
 
   return (
@@ -27,8 +28,8 @@ const LoginForm = () => {
     >
       <h2>Log In</h2>
     
-      {message 
-        ? <div>{message}</div>
+      {formError 
+        ? <div>{formError}</div>
         : null
       }
 

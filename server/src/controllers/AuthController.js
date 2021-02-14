@@ -10,8 +10,8 @@ export default class UserController {
 
     if (!loginError.isEmpty()) {
       return response.status(422).json({
-        message: 'Unable to validate request.',
-        error: loginError.array()[0].msg
+        error: 'Unable to validate request.',
+        cause: loginError.array()[0].msg
       })
     }
 
@@ -21,14 +21,14 @@ export default class UserController {
       user = await User.findOne({username: request.body.username}).select('password')
     } catch(error) {
       return response.status(500).json({
-        message: 'Failed to check for existing user.',
-        error: error.message
+        error: 'Failed to check for existing user.',
+        cause: error.message
       })
     }
 
     if (!user) {
       return response.status(400).json({
-        message: 'Invalid username.'
+        error: 'Invalid username or password.'
       })
     }
 
@@ -38,14 +38,14 @@ export default class UserController {
       validPassword = await bcrypt.compare(request.body.password, user.password)
     } catch(error) {
       return response.status(500).json({
-        message: 'Failed to compare passwords.',
-        error: error.message
+        error: 'Failed to compare passwords.',
+        cause: error.message
       })
     }
 
     if (!validPassword) {
        return response.status(400).json({
-          message: 'Invalid password.'
+          error: 'Invalid username or password.'
        })
     }
 
@@ -55,8 +55,8 @@ export default class UserController {
       accessToken = await AccessToken.create(user)
     } catch(error) {
       return response.status(500).json({
-        message: 'Failed to create access token.',
-        error: error.message
+        error: 'Failed to create access token.',
+        cause: error.message
       })
     }
 
