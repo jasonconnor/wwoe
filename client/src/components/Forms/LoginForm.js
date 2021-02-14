@@ -10,12 +10,12 @@ const LoginForm = () => {
   const [message, setMessage] = useState()
   const {errors, handleSubmit, register} = useForm({mode: 'onChange'})
 
+  // TODO: Clear password on submit, only set error message, push to admin dashboard on sign in
   const onSubmit = async (data) => {
     try {
       const response = await LoginService(data)
       setMessage(response.message)
     } catch(error) {
-      console.error(error)
       setMessage(error)
     }
   }
@@ -62,7 +62,7 @@ const LoginForm = () => {
 
       <S.FormSubmit
         type='submit'
-        value='Register'
+        value='Login'
       />
     </S.Form>
   )

@@ -2,7 +2,13 @@ import AccessToken from '../utils/AccessToken.js'
 
 export default class Authentication {
   static checkToken = async (request, response, next) => {
-    const authHeader = req.header.authorization
+    const authHeader = request.headers.authorization
+
+    if (!authHeader) {
+      return response.status(401).json({
+        message: 'No access token provided.'
+      })
+    }
     const accessToken = authHeader.split(' ')[1]
 
     let token = null
@@ -11,7 +17,7 @@ export default class Authentication {
       token = await AccessToken.verify(accessToken)
     } catch(error) {
       return response.status(401).json({
-        message: 'Failed to validate token',
+        message: 'Failed to validate token.',
         error: error.message
       })
     }

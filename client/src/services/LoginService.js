@@ -1,3 +1,5 @@
+import {setAccessToken} from '../accessToken'
+
 const LoginService = (data) => {
   return new Promise(async (resolve,reject) => {
     const formData = new FormData()
@@ -13,6 +15,10 @@ const LoginService = (data) => {
         method: 'POST',
         body: formData
       })
+      
+      const token = response.headers.get('Authentication')
+
+      setAccessToken(token)
 
       result = await response.json()
     } catch(error) {

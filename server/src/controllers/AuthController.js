@@ -122,4 +122,20 @@ export default class UserController {
       message: `Successfully added new user: ${result.username}.`
     })
   }
+
+  // TODO: Place in UserController
+  static getAccount = async (request, response) => {
+    let user = null
+
+    try {
+      user = await User.findOne({_id: request.token.sub})
+    } catch(error) {
+      return response.status(500).json({
+        message: 'Failed to get current user.',
+        error: error.message
+      })
+    }
+
+    return response.status(200).json(user)
+  }
 }

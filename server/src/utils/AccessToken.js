@@ -11,7 +11,7 @@ export default class AccessToken {
         exp: currentTime + (60*5),
         sub: user.id,
         aud: user.role
-      }, process.env.ACCESS_SECRET,  (error, token) => {
+      }, process.env.ACCESS_SECRET, (error, token) => {
         if (error) reject(error)
 
         resolve(token)
@@ -21,7 +21,7 @@ export default class AccessToken {
 
   static verify = (token) => {
     return new Promise((resolve, reject) => {
-      jwt.verify(token, node.env.ACCESS_SECRET, () => {
+      jwt.verify(token, process.env.ACCESS_SECRET, (error, decoded) => {
         if (error) reject(error)
 
         resolve(decoded)

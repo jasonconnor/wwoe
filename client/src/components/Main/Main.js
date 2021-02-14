@@ -1,6 +1,7 @@
 import {Switch, Route} from 'react-router-dom'
 
 import Index from '../Index/Index'
+import Profile from '../Profile'
 import LoginForm from '../Forms/LoginForm'
 import RegistrationForm from '../Forms/RegistrationForm'
 
@@ -12,6 +13,7 @@ const Main = () => {
       <S.Wrapper>
         <Switch>
           <Route exact path='/' component={Index} />
+          <Route exact path='/profile' component={Profile} />
           <Route exact path='/login' component={LoginForm} />
           <Route exact path='/register' component={RegistrationForm} />
         </Switch>
