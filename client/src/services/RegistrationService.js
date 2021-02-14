@@ -17,12 +17,11 @@ const RegistrationService = (data) => {
       result = await response.json()
     } catch(error) {
       console.log(error)
-      reject('No response from the server.')
+      reject('No response from the server. Try again later.')
     }
 
-    if (!result) {
-      reject('Received empty response from the server.')
-    }
+    if (!result) reject('Received empty response from the server.')
+    else if (result.hasOwnProperty('error')) reject(result.error)
     
     resolve(result)
   })

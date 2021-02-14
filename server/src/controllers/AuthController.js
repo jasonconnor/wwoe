@@ -10,8 +10,7 @@ export default class UserController {
 
     if (!loginError.isEmpty()) {
       return response.status(422).json({
-        error: 'Unable to validate request.',
-        cause: loginError.array()[0].msg
+        error: loginError.array()[0].msg
       })
     }
 
@@ -66,11 +65,11 @@ export default class UserController {
   }
 
   static register = async (request, response) => {
+    // TODO: Provide access token/sign in upon registration
     const registrationError = validationResult(request)
 
     if (!registrationError.isEmpty()) {
       return response.status(422).json({
-        message: 'Unable to validate request.',
         error: registrationError.array()[0].msg
       })
     }
@@ -80,14 +79,14 @@ export default class UserController {
       userExists = await User.findOne({username: request.body.username})
     } catch(error) {
       return response.status(500).json({
-        message: 'Failed to search for existing user.',
-        error: error.message
+        error: 'Failed to search for existing user.',
+        cause: error.message
       })
     }
 
     if (userExists) {
       return response.status(409).json({
-        message: 'That username is already registered.'
+        error: 'That username is already registered.'
       })
     }
 
@@ -97,8 +96,8 @@ export default class UserController {
       hashedPassword = await bcrypt.hash(request.body.password, 10)
     } catch(error) {
       return response.status(500).json({
-        message: 'Failed to hash password.',
-        error: error.message
+        error: 'Failed to hash password.',
+        cause: error.message
       })
     }
 
@@ -113,8 +112,8 @@ export default class UserController {
       result = await newUser.save()
     } catch(error) {
       return response.status(500).json({
-        message: 'Failed to save new user.',
-        error: error.message
+        error: 'Failed to save new user.',
+        cause: error.message
       })
     }
 
@@ -131,8 +130,8 @@ export default class UserController {
       user = await User.findOne({_id: request.token.sub})
     } catch(error) {
       return response.status(500).json({
-        message: 'Failed to get current user.',
-        error: error.message
+        error: 'Failed to get current user.',
+        cause: error.message
       })
     }
 

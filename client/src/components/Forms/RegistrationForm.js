@@ -6,18 +6,22 @@ import RegistrationService from '../../services/RegistrationService'
 
 import * as S from './style'
 
-const RegistrationForm = () => {
-  const [message, setMessage] = useState()
-  const {errors, handleSubmit, register} = useForm({mode: 'onChange'})
+const RegistrationForm = ({history}) => {
+  const [formError, setFormError] = useState('')
+  const {errors, handleSubmit, register, reset} = useForm({mode: 'onChange'})
 
   const onSubmit = async (data) => {
     try {
-      const response = await RegistrationService(data)
-      setMessage(response.message)
+      await RegistrationService(data)
+      // TODO: change registration to provide access token, then push to
+      //       admin dashboard
+      history.push('/login')
     } catch(error) {
       console.error(error)
-      setMessage(error)
+      setFormError(error)
     }
+
+    reset()
   }
 
   return (
@@ -28,8 +32,8 @@ const RegistrationForm = () => {
 
       <h2>Register</h2>
 
-      {message 
-        ? <div>{message}</div>
+      {formError 
+        ? <div>{formError}</div>
         : null
       }
 
