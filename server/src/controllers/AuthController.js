@@ -18,7 +18,7 @@ export default class UserController {
     let user = null
 
     try {
-      user = await User.findOne({username: request.body.username})
+      user = await User.findOne({username: request.body.username}).select('password')
     } catch(error) {
       return response.status(500).json({
         message: 'Failed to check for existing user.',
