@@ -9,7 +9,7 @@ export default class RefreshToken {
         iss: 'localhost',
         iat: currentTime,
         exp: currentTime + (86400 * 7),
-        sub: user.id
+        sub: user
       }, process.env.REFRESH_SECRET, (error, token) => {
         if (error) reject(error)
 

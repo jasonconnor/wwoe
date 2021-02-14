@@ -160,12 +160,14 @@ export default class UserController {
       })
     }
 
+    const user = validToken.sub
+
     let accessToken = null
     let refreshToken = null
 
     try {
-      accessToken = await AccessToken.create(validToken.sub)
-      refreshToken = await RefreshToken.create(validToken.sub)
+      accessToken = await AccessToken.create(user)
+      refreshToken = await RefreshToken.create(user)
     } catch(error) {
       return response.status(500).json({
         error: 'Failed to create new tokens.',
